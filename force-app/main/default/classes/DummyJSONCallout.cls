@@ -59,16 +59,16 @@ public with sharing class DummyJSONCallout {
 		
 		// Send the HTTP request and get the response.
 		HTTPResponse res = http.send(req);
-		System.debug(res.getBody());
-		System.debug(res.getStatusCode());
-		System.debug(res.getStatus());
+		//System.debug(res.getBody());
+		//System.debug(res.getStatusCode());
+		//System.debug(res.getStatus());
 		
 		
 		// If the HTTP response code is successful, parse the JSON response and update the contact.
 		if(res.getStatusCode() == 200) {
 			//create contact from json
 			Contact cont = createContactFromJson(res.getBody());
-			System.debug(cont);
+			//System.debug(cont);
 		}
 		
 		//upsert cont DummyJSON_Id__c; //insert/update from the JSON response using the external id (dummyUserId)
@@ -93,13 +93,13 @@ public with sharing class DummyJSONCallout {
 	private static Contact createContactFromJson(String jsonResponse) {
 		// Deserialize the JSON string into map of primitive data types.
 		Map<String, Object> jsonMap = (Map<String,Object>) JSON.deserializeUntyped(jsonResponse);
-		System.debug(jsonMap);
-		System.debug(jsonMap.get('firstName'));
-		System.debug(jsonMap.get('lastName'));
-		System.debug(jsonMap.get('email'));
-		System.debug(jsonMap.get('phone'));
-		System.debug(jsonMap.get('birthDate'));
-		System.debug(jsonMap.get('id'));
+		//System.debug(jsonMap);
+		//System.debug(jsonMap.get('firstName'));
+		//System.debug(jsonMap.get('lastName'));
+		//System.debug(jsonMap.get('email'));
+		//System.debug(jsonMap.get('phone'));
+		//System.debug(jsonMap.get('birthDate'));
+		//System.debug(jsonMap.get('id'));
 		
 		// Create a new contact from the JSON response.
 		// Set the contact fields from the JSON response.
@@ -114,12 +114,12 @@ public with sharing class DummyJSONCallout {
 		// Deserialize the address from the JSON response.
 		Map<String, Object> addressMap = (Map<String,Object>) jsonMap.get('address');
 		// Set the address fields on the contact.
-		System.debug(addressMap);
-		System.debug(addressMap.get('address'));
-		System.debug(addressMap.get('city'));
-		System.debug(addressMap.get('postalCode'));
-		System.debug(addressMap.get('state'));
-		System.debug(addressMap.get('country'));
+		//System.debug(addressMap);
+		//System.debug(addressMap.get('address'));
+		//System.debug(addressMap.get('city'));
+		//System.debug(addressMap.get('postalCode'));
+		//System.debug(addressMap.get('state'));
+		//System.debug(addressMap.get('country'));
 		cont.MailingStreet = (String) addressMap.get('address');
 		cont.MailingCity = (String) addressMap.get('city');
 		cont.MailingPostalCode = (String) addressMap.get('postalCode');
@@ -127,7 +127,7 @@ public with sharing class DummyJSONCallout {
 		cont.MailingCountry = (String) addressMap.get('country');
 		
 		insert cont;
-		System.debug('Inserted contact::: ' +cont);
+		//System.debug('Inserted contact::: ' +cont);
 		return cont;
 	}
 
@@ -162,16 +162,16 @@ public with sharing class DummyJSONCallout {
 		// Send the HTTP request and get the response.
 		Http http = new Http();
      	HTTPResponse res = http.send(req);
-    	System.debug(res.getBody());
-		System.debug(res.getStatusCode());
-		System.debug(res.getStatus());
+    	//System.debug(res.getBody());
+		//System.debug(res.getStatusCode());
+		//System.debug(res.getStatus());
 
 		// If the HTTP response code is successful, update the contact.
 		if(res.getStatusCode() >= 200 || res.getStatusCode() <= 299 ) {
 			Contact cont = [SELECT Id, DummyJSON_Last_Updated__c FROM Contact WHERE Id = :contactId];
 			cont.DummyJSON_Last_Updated__c = Date.today();
-			System.debug('Success: contact created in other system:::  ');
-			System.debug(res.getBody());
+			//System.debug('Success: contact created in other system:::  ');
+			//System.debug(res.getBody());
 			update cont;
 		}
 	}
@@ -206,7 +206,7 @@ public with sharing class DummyJSONCallout {
 
 		// Serialize the map into a JSON string.
 		String jsonPayload = JSON.serialize(jsonMap);
-		System.debug('Payload being sent to endpoint: ' + jsonPayload);
+		//System.debug('Payload being sent to endpoint: ' + jsonPayload);
 		// Make sure to check that required contacts fields have a value. Default the value to unknown if it does not exists.
 
 		// Integration data can change over time. It is a best practice to add safeguards/validation to ensure the integration does not break.
