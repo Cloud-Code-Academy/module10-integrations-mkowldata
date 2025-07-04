@@ -35,7 +35,7 @@ public with sharing class DummyJSONCallout {
      */
 	
 	@Future(callout=true)
-	public static void getDummyJSONUserFromId(String dummyUserId) {
+	public static void getDummyJSONUserFromId(String dummyUserId) {		
 		// Create HTTP request to send.
 		HttpRequest req = new HTTPRequest();
 
@@ -97,7 +97,7 @@ public with sharing class DummyJSONCallout {
 		cont.DummyJSON_Id__c = String.valueOf(jsonMap.get('id'));
 		// Deserialize the address from the JSON response.
 		Map<String, Object> jsonMapAddress = (Map<String, Object>) jsonMap.get('address');
-		System.debug(jsonMapAddress);
+		//System.debug(jsonMapAddress);
 		// Set the address fields on the contact.
 		cont.MailingStreet = (String) jsonMapAddress.get('address');
 		cont.MailingCity = (String) jsonMapAddress.get('city');
@@ -166,6 +166,7 @@ public with sharing class DummyJSONCallout {
      * @param String contactId The Salesforce Contact ID used to fetch the contact's fields and generate the JSON payload.
      * @return String The JSON string payload that represents the Contact's details.
      */
+	
 	@TestVisible // Allows test class to see this method. Since it is private, it would not be visible otherwise.
 	private static String generateDummyJsonUserPayload(String contactId) {
 		// Query the contact to get the field values to generate the JSON payload.
@@ -179,7 +180,7 @@ public with sharing class DummyJSONCallout {
 		jsonMap.put('salesforceId', cont.Id);
 		// Serialize the map into a JSON string.
 		String jsonPayload = JSON.serialize(jsonMap);
-		System.debug('Payload being sent to url: ' + jsonPayload);
+		//System.debug('Payload being sent to url: ' + jsonPayload);
 		// Make sure to check that required contacts fields have a value. Default the value to unknown if it does not exists.
 		// Integration data can change over time. It is a best practice to add safeguards/validation to ensure the integration does not break.
 
