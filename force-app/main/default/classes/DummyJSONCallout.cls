@@ -22,7 +22,19 @@
  */
 
 public with sharing class DummyJSONCallout {
-
+	
+	//@future(callout=true) 
+	public static void handleBeforeInsert(List<Contact> newContact) {
+	Integer randomNum = (Integer)(Math.random()*100);
+        for(Contact cont : newContact) {
+		if(cont.DummyJSON_Id__c != null){
+			continue;
+		} else {
+            cont.DummyJSON_Id__c = String.valueOf(randomNum);
+			cont.LeadSource = 'Other';
+        }
+	}
+}
 	/* 
 	 * Question 1
      * Fetches user information from an external system https://dummyjson.com/user/{id} ('DummyJsonUser') based on the provided dummy user ID. 
@@ -33,6 +45,7 @@ public with sharing class DummyJSONCallout {
 	 * 
      * @param dummyUserId The ID of the user in the external system to fetch data for.
      */
+<<<<<<< HEAD
 	
 	@Future(callout=true)
 	public static void getDummyJSONUserFromId(String dummyUserId) {		
@@ -47,10 +60,26 @@ public with sharing class DummyJSONCallout {
 
 		// Send the HTTP request and get the response.
 		Http http = new Http();
+=======
+	@future(callout=true) 
+	public static void getDummyJSONUserFromId(String dummyUserId) {
+		// Create HTTP request to send.
+		HttpRequest req = new HttpRequest();
+
+		// Set the endpoint URL. Use direct URL or for best practices use Named Credential.
+		req.setEndpoint('callout:DummyJsonUser' + '/user/' + dummyUserId);
+		
+		// Set the HTTP method to GET.
+		req.setMethod('GET');
+		Http http = new Http();
+		
+		// Send the HTTP request and get the response.
+>>>>>>> e41cc7e012f5a718a7a872e08b7a9583ad11f268
 		HTTPResponse res = http.send(req);
 		//System.debug(res.getBody());
 		//System.debug(res.getStatusCode());
 		//System.debug(res.getStatus());
+<<<<<<< HEAD
 
 		// If the HTTP response code is successful, parse the JSON response and update the contact.
 		if(res.getStatusCode() == 200) {
@@ -59,6 +88,18 @@ public with sharing class DummyJSONCallout {
 			System.debug(cont);
 			upsert cont DummyJSON_Id__c; //insert/update from the JSON response using the external id (dummyUserId)
 		}
+=======
+		
+		
+		// If the HTTP response code is successful, parse the JSON response and update the contact.
+		if(res.getStatusCode() == 200) {
+			//create contact from json
+			Contact cont = createContactFromJson(res.getBody());
+			//System.debug(cont);
+		}
+		
+		//upsert cont DummyJSON_Id__c; //insert/update from the JSON response using the external id (dummyUserId)
+>>>>>>> e41cc7e012f5a718a7a872e08b7a9583ad11f268
 	}
 
 	/* 
@@ -79,6 +120,7 @@ public with sharing class DummyJSONCallout {
 	@TestVisible // Allows test class to see this method. Since it is private, it would not be visible otherwise.
 	private static Contact createContactFromJson(String jsonResponse) {
 		// Deserialize the JSON string into map of primitive data types.
+<<<<<<< HEAD
 		Map<String, Object> jsonMap = (Map<String, Object>) JSON.deserializeUntyped(jsonResponse);
 		//System.debug(jsonMap);
 		//System.debug(jsonMap.get('firstName'));
@@ -107,6 +149,44 @@ public with sharing class DummyJSONCallout {
 		cont.MailingCountry = (String) jsonMapAddress.get('country');
 		
 		//insert cont;
+=======
+		Map<String, Object> jsonMap = (Map<String,Object>) JSON.deserializeUntyped(jsonResponse);
+		//System.debug(jsonMap);
+		//System.debug(jsonMap.get('firstName'));
+		//System.debug(jsonMap.get('lastName'));
+		//System.debug(jsonMap.get('email'));
+		//System.debug(jsonMap.get('phone'));
+		//System.debug(jsonMap.get('birthDate'));
+		//System.debug(jsonMap.get('id'));
+		
+		// Create a new contact from the JSON response.
+		// Set the contact fields from the JSON response.
+		Contact cont = new Contact();
+		cont.FirstName = (String) jsonMap.get('firstName');
+		cont.LastName = (String) jsonMap.get('lastName');
+		cont.Email = (String) jsonMap.get('email');
+		cont.Phone = (String) jsonMap.get('phone');
+		cont.Birthdate = Date.valueOf((String) jsonMap.get('birthDate'));
+		cont.DummyJSON_Id__c = String.valueOf(jsonMap.get('id'));
+		
+		// Deserialize the address from the JSON response.
+		Map<String, Object> addressMap = (Map<String,Object>) jsonMap.get('address');
+		// Set the address fields on the contact.
+		//System.debug(addressMap);
+		//System.debug(addressMap.get('address'));
+		//System.debug(addressMap.get('city'));
+		//System.debug(addressMap.get('postalCode'));
+		//System.debug(addressMap.get('state'));
+		//System.debug(addressMap.get('country'));
+		cont.MailingStreet = (String) addressMap.get('address');
+		cont.MailingCity = (String) addressMap.get('city');
+		cont.MailingPostalCode = (String) addressMap.get('postalCode');
+		cont.mailingState = (String) addressMap.get('state');
+		cont.MailingCountry = (String) addressMap.get('country');
+		
+		insert cont;
+		//System.debug('Inserted contact::: ' +cont);
+>>>>>>> e41cc7e012f5a718a7a872e08b7a9583ad11f268
 		return cont;
 	}
 
@@ -123,6 +203,7 @@ public with sharing class DummyJSONCallout {
      * 
      * @param contactId The Salesforce Contact ID used to generate the JSON payload for the external system.
      */
+<<<<<<< HEAD
 	@Future(callout=true)
 	public static void postCreateDummyJSONUser(String contactId) {
 		// Create HTTP request to send.
@@ -150,6 +231,37 @@ public with sharing class DummyJSONCallout {
 			//System.debug('status code:: ' + res.getStatusCode());
 			Contact cont = new Contact (Id = contactId, DummyJSON_Last_Updated__c = System.now());
 			update cont;	
+=======
+	@future(callout=true)
+	public static void postCreateDummyJSONUser(String contactId) {
+		// Create HTTP request to send.
+		HttpRequest req= new HttpRequest();
+
+		// Set the endpoint URL. Use direct URL or for best practices use Named Credential.
+		req.setEndpoint('callout:DummyJsonUser' + '/users/add'); // https://dummyjson.com/users
+
+		// Set the HTTP method to POST.
+		req.setMethod('POST');
+
+		// Set the body using generateDummyJsonUserPayload method.
+		//req.setHeader('Content-Type', 'application/json');// set inside the Named Credential
+		req.setBody(generateDummyJsonUserPayload(contactId));
+
+		// Send the HTTP request and get the response.
+		Http http = new Http();
+     	HTTPResponse res = http.send(req);
+    	//System.debug(res.getBody());
+		//System.debug(res.getStatusCode());
+		//System.debug(res.getStatus());
+
+		// If the HTTP response code is successful, update the contact.
+		if(res.getStatusCode() >= 200 || res.getStatusCode() <= 299 ) {
+			Contact cont = [SELECT Id, DummyJSON_Last_Updated__c FROM Contact WHERE Id = :contactId];
+			cont.DummyJSON_Last_Updated__c = Date.today();
+			//System.debug('Success: contact created in other system:::  ');
+			//System.debug(res.getBody());
+			update cont;
+>>>>>>> e41cc7e012f5a718a7a872e08b7a9583ad11f268
 		}
 	}
 
@@ -173,19 +285,34 @@ public with sharing class DummyJSONCallout {
 	private static String generateDummyJsonUserPayload(String contactId) {
 		// Query the contact to get the field values to generate the JSON payload.
 		Contact cont = [SELECT Id, FirstName, LastName, Email, Phone FROM Contact WHERE Id = :contactId];
+<<<<<<< HEAD
 		// Create a map of the field values.
 		Map<String, Object> jsonMap = new Map<String, Object>();
+=======
+
+		// Create a map of the field values.
+		Map<String,Object> jsonMap = new Map<String,Object>();
+>>>>>>> e41cc7e012f5a718a7a872e08b7a9583ad11f268
 		jsonMap.put('firstName', cont.FirstName);
 		jsonMap.put('lastName', cont.LastName);
 		jsonMap.put('email', cont.Email);
 		jsonMap.put('phone', cont.Phone);
 		jsonMap.put('salesforceId', cont.Id);
+<<<<<<< HEAD
 		// Serialize the map into a JSON string.
 		String jsonPayload = JSON.serialize(jsonMap);
 		//System.debug('Payload being sent to url: ' + jsonPayload);
+=======
+
+		// Serialize the map into a JSON string.
+		String jsonPayload = JSON.serialize(jsonMap);
+		//System.debug('Payload being sent to endpoint: ' + jsonPayload);
+>>>>>>> e41cc7e012f5a718a7a872e08b7a9583ad11f268
 		// Make sure to check that required contacts fields have a value. Default the value to unknown if it does not exists.
+
 		// Integration data can change over time. It is a best practice to add safeguards/validation to ensure the integration does not break.
 
 		return jsonPayload;
 	}
 }
+

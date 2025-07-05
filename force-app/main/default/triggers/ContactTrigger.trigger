@@ -16,6 +16,7 @@
  * 
  * Optional Challenge: Use a trigger handler class to implement the trigger logic.
  */
+<<<<<<< HEAD
 
 
 
@@ -41,3 +42,14 @@ trigger ContactTrigger on Contact(before insert, after insert, after update) {
 
 }
 
+=======
+Trigger ContactTrigger on Contact(after update, before insert) {
+	if(Trigger.isInsert && Trigger.isBefore) {
+		DummyJSONCallout.handleBeforeInsert(Trigger.new);
+	}
+
+	if (Trigger.isUpdate && Trigger.isAfter) {
+		ContactTriggerHandler.handleAfterUpdate(Trigger.new);
+}
+}
+>>>>>>> e41cc7e012f5a718a7a872e08b7a9583ad11f268
