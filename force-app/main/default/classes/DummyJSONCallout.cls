@@ -55,8 +55,8 @@ public with sharing class DummyJSONCallout {
 		// If the HTTP response code is successful, parse the JSON response and update the contact.
 		if(res.getStatusCode() == 200) {
 			Contact cont = createContactFromJson(res.getBody());
-			//System.debug('StatusCode = 200');
-			//System.debug(cont);
+			System.debug('StatusCode = 200');
+			System.debug(cont);
 			upsert cont DummyJSON_Id__c; //insert/update from the JSON response using the external id (dummyUserId)
 		}
 	}
@@ -89,6 +89,7 @@ public with sharing class DummyJSONCallout {
 		// Create a new contact from the JSON response.
 		Contact cont = new Contact();
 		// Set the contact fields from the JSON response.
+		
 		cont.FirstName = (String) jsonMap.get('firstName');
 		cont.LastName = (String) jsonMap.get('lastName');
 		cont.Birthdate = Date.valueOf((String) jsonMap.get('birthDate'));
@@ -105,6 +106,7 @@ public with sharing class DummyJSONCallout {
 		cont.MailingState = (String) jsonMapAddress.get('state');
 		cont.MailingCountry = (String) jsonMapAddress.get('country');
 		
+		//insert cont;
 		return cont;
 	}
 
