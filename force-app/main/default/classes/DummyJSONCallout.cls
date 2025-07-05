@@ -23,18 +23,6 @@
 
 public with sharing class DummyJSONCallout {
 	
-	//@future(callout=true) 
-	public static void handleBeforeInsert(List<Contact> newContact) {
-	Integer randomNum = (Integer)(Math.random()*100);
-        for(Contact cont : newContact) {
-		if(cont.DummyJSON_Id__c != null){
-			continue;
-		} else {
-            cont.DummyJSON_Id__c = String.valueOf(randomNum);
-			cont.LeadSource = 'Other';
-        }
-	}
-}
 	/* 
 	 * Question 1
      * Fetches user information from an external system https://dummyjson.com/user/{id} ('DummyJsonUser') based on the provided dummy user ID. 
@@ -45,33 +33,33 @@ public with sharing class DummyJSONCallout {
 	 * 
      * @param dummyUserId The ID of the user in the external system to fetch data for.
      */
-	@future(callout=true) 
-	public static void getDummyJSONUserFromId(String dummyUserId) {
+	
+	@Future(callout=true)
+	public static void getDummyJSONUserFromId(String dummyUserId) {		
 		// Create HTTP request to send.
-		HttpRequest req = new HttpRequest();
+		HttpRequest req = new HTTPRequest();
 
 		// Set the endpoint URL. Use direct URL or for best practices use Named Credential.
-		req.setEndpoint('callout:DummyJsonUser' + '/user/' + dummyUserId);
-		
+		req.setEndpoint('callout:DummyJsonUser' + '/' + dummyUserId); //https://dummyjson.com/users
+
 		// Set the HTTP method to GET.
 		req.setMethod('GET');
-		Http http = new Http();
-		
+
 		// Send the HTTP request and get the response.
+		Http http = new Http();
 		HTTPResponse res = http.send(req);
 		//System.debug(res.getBody());
 		//System.debug(res.getStatusCode());
 		//System.debug(res.getStatus());
-		
-		
+				
 		// If the HTTP response code is successful, parse the JSON response and update the contact.
 		if(res.getStatusCode() == 200) {
 			//create contact from json
 			Contact cont = createContactFromJson(res.getBody());
 			//System.debug(cont);
+			//upsert cont cont.DummyJSON_Id__c; //insert/update from the JSON response using the external id (dummyUserId)
 		}
-		
-		//upsert cont DummyJSON_Id__c; //insert/update from the JSON response using the external id (dummyUserId)
+			
 	}
 
 	/* 
@@ -126,7 +114,7 @@ public with sharing class DummyJSONCallout {
 		cont.mailingState = (String) addressMap.get('state');
 		cont.MailingCountry = (String) addressMap.get('country');
 		
-		insert cont;
+		//insert cont;
 		//System.debug('Inserted contact::: ' +cont);
 		return cont;
 	}
@@ -191,6 +179,7 @@ public with sharing class DummyJSONCallout {
      * @param String contactId The Salesforce Contact ID used to fetch the contact's fields and generate the JSON payload.
      * @return String The JSON string payload that represents the Contact's details.
      */
+	
 	@TestVisible // Allows test class to see this method. Since it is private, it would not be visible otherwise.
 	private static String generateDummyJsonUserPayload(String contactId) {
 		// Query the contact to get the field values to generate the JSON payload.
