@@ -152,11 +152,13 @@ public with sharing class DummyJSONCallout {
 		System.debug(res.getStatusCode());
 
 		// If the HTTP response code is successful, update the contact.
-		if(res.getStatusCode() >= 200 || res.getStatusCode() <= 299) {
+		if(res.getStatusCode() >= 200 && res.getStatusCode() <= 299) {
 			System.debug('status code:: ' + res.getStatusCode());
-			Contact cont = new Contact (Id = contactId, DummyJSON_Last_Updated__c = System.now());
+			Contact cont = [SELECT Id, DummyJSON_Last_Updated__c FROM Contact WHERE Id = :contactId];
+			cont.DummyJSON_Last_Updated__c = System.now();
+			//Contact cont = new Contact (Id = contactId, DummyJSON_Last_Updated__c = System.now());
 			System.debug('Cont to update will be ::: ' + cont);
-			update cont;	
+			update cont;
 			//upsert cont;
 		}
 	}

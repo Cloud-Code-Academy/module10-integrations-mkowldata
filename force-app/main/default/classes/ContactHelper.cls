@@ -16,6 +16,9 @@ public class ContactHelper {
 
     public static void handleAfterUpdate(List<Contact> updatedContacts) {
         // If a Contact record is updated and the DummyJSON_Id__c value is greater than 100, the trigger initiates the postCreateDummyJSONUser API call. 
+        if(System.isFuture()) {
+            return;
+        }
         for(Contact cont : updatedContacts) {
             if(Integer.valueOf(cont.DummyJSON_Id__c) >= 100) {
                 DummyJSONCallout.postCreateDummyJSONUser(cont.Id);    
