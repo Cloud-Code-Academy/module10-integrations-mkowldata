@@ -110,7 +110,7 @@ public with sharing class DummyJSONCallout {
 		cont.MailingState = (String) jsonMapAddress.get('state');
 		cont.MailingCountry = (String) jsonMapAddress.get('country');
 		
-		upsert cont DummyJSON_Id__c;
+		//upsert cont DummyJSON_Id__c;
 		//insert cont;
 		return cont;
 	}
@@ -157,6 +157,7 @@ public with sharing class DummyJSONCallout {
 			Contact cont = new Contact (Id = contactId, DummyJSON_Last_Updated__c = System.now());
 			System.debug('Cont to update will be ::: ' + cont);
 			update cont;	
+			//upsert cont;
 		}
 	}
 
@@ -194,7 +195,6 @@ public with sharing class DummyJSONCallout {
 		// Make sure to check that required contacts fields have a value. Default the value to unknown if it does not exists.
 
 		// Integration data can change over time. It is a best practice to add safeguards/validation to ensure the integration does not break.
-
 		return jsonPayload;
 	}
 }
