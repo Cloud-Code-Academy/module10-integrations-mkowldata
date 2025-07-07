@@ -5,4 +5,5 @@
 // You can also execute the entire file by running the command:
 //     SFDX: Execute Anonymous Apex with Editor Contents
 
-DummyJSONCallout.postCreateDummyJSONUser('003ak00000LjjptAAB');
+//DummyJSONCallout.postCreateDummyJSONUser('003ak00000LjjptAAB');
+DummyJSONCallout.getDummyJSONUserFromId('7');
