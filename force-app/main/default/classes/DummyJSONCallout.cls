@@ -60,7 +60,7 @@ public with sharing class DummyJSONCallout {
 			Contact cont = createContactFromJson(res.getBody());
 			System.debug('StatusCode = 200');
 			System.debug(cont);
-			//upsert cont DummyJSON_Id__c; //insert/update from the JSON response using the external id (dummyUserId)
+			upsert cont DummyJSON_Id__c; //insert/update from the JSON response using the external id (dummyUserId)
 		}
 			
 	}
