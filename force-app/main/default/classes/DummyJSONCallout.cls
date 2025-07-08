@@ -40,9 +40,8 @@ public with sharing class DummyJSONCallout {
 		HttpRequest req = new HTTPRequest();
 
 		// Set the endpoint URL. Use direct URL or for best practices use Named Credential.
-		req.setEndpoint('https://dummyjson.com/users/' + dummyUserId);
-		
-		//req.setEndpoint('callout:DummyJsonUser' + '/' + dummyUserId); //https://dummyjson.com/users
+		//req.setEndpoint('https://dummyjson.com/users/' + dummyUserId);
+		req.setEndpoint('callout:DummyJsonUser' + '/' + dummyUserId); //https://dummyjson.com/users
 
 		// Set the HTTP method to GET.
 		req.setMethod('GET');
@@ -134,12 +133,12 @@ public with sharing class DummyJSONCallout {
 		HttpRequest req = new HttpRequest();
 
 		// Set the endpoint URL. Use direct URL or for best practices use Named Credential.
-		req.setEndpoint('https://dummyjson.com/users/add');
-		//req.setEndpoint('callout:DummyJsonUser' + '/add'); //https://dummyjson.com/users
+		//req.setEndpoint('https://dummyjson.com/users/add');
+		req.setEndpoint('callout:DummyJsonUser' + '/add'); //https://dummyjson.com/users
 
 		// Set the HTTP method to POST.
 		req.setMethod('POST');
-		req.setHeader('Content-Type', 'application/json'); //already in named credentials
+		//req.setHeader('Content-Type', 'application/json'); //already in named credentials
 
 		// Set the body using generateDummyJsonUserPayload method.
 		req.setBody(generateDummyJsonUserPayload(contactId));
