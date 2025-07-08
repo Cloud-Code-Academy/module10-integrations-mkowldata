@@ -24,6 +24,7 @@ public with sharing class DummyJSONCalloutTest {
 			FROM Contact
 			WHERE DummyJSON_Id__c = '1'
 		];
+		
 
 		// Assert statements to ensure that the values in the created contact match what was in our mock response.
 		System.assertEquals('test@example.com', cont.Email, 'Email does not match your value: ' + cont.Email);
