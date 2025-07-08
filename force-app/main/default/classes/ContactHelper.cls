@@ -6,7 +6,7 @@ public class ContactHelper {
             if(cont.DummyJSON_Id__c == null) {
                 Integer randomNum = (Integer)(Math.random() * 100);
                 cont.DummyJSON_Id__c = String.valueOf(randomNum);
-                System.debug('DummyJSON random no assigned:: ' + cont.DummyJSON_Id__c );
+                //System.debug('DummyJSON random no assigned:: ' + cont.DummyJSON_Id__c );
                 if(integer.valueOf(cont.DummyJSON_Id__c) <= 100) {
                     DummyJSONCallout.getDummyJSONUserFromId(cont.DummyJSON_Id__c );
                 }

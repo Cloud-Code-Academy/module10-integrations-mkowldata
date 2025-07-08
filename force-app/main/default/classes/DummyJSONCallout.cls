@@ -58,8 +58,8 @@ public with sharing class DummyJSONCallout {
 		// If the HTTP response code is successful, parse the JSON response and update the contact.
 		if(res.getStatusCode() == 200) {
 			Contact cont = createContactFromJson(res.getBody());
-			System.debug('StatusCode = 200');
-			System.debug(cont);
+			//System.debug('StatusCode = 200');
+			//System.debug(cont);
 			upsert cont DummyJSON_Id__c; //insert/update from the JSON response using the external id (dummyUserId)
 		}
 			
@@ -147,17 +147,17 @@ public with sharing class DummyJSONCallout {
 		// Send the HTTP request and get the response.
 		Http http = new Http();
 		HTTPResponse res = http.send(req);
-		System.debug(res.getBody());
-		System.debug(res.getStatus());
-		System.debug(res.getStatusCode());
+		//System.debug(res.getBody());
+		//System.debug(res.getStatus());
+		//System.debug(res.getStatusCode());
 
 		// If the HTTP response code is successful, update the contact.
 		if(res.getStatusCode() >= 200 && res.getStatusCode() <= 299) {
-			System.debug('status code:: ' + res.getStatusCode());
+			//System.debug('status code:: ' + res.getStatusCode());
 			Contact cont = [SELECT Id, DummyJSON_Last_Updated__c FROM Contact WHERE Id = :contactId];
 			cont.DummyJSON_Last_Updated__c = System.now();
 			//Contact cont = new Contact (Id = contactId, DummyJSON_Last_Updated__c = System.now());
-			System.debug('Cont to update will be ::: ' + cont);
+			//System.debug('Cont to update will be ::: ' + cont);
 			update cont;
 			//upsert cont;
 		}
